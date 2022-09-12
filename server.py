@@ -1,8 +1,5 @@
-from http import server
-from multiprocessing import connection
 from socket import *
 import argparse
-from sqlite3 import connect
 import time as dt
 
 parser = argparse.ArgumentParser()
@@ -12,16 +9,21 @@ args = parser.parse_args()
 
 serverPort = args.port
 Type = args.type
+print(Type)
 
 if (Type == "U"):
     serverSocket = socket(AF_INET,SOCK_DGRAM) 
     serverSocket.bind(('',serverPort))
     print ("The server is ready to receieve")
     while True:
-        message, clientAddress = serverSocket.recvfrom(2048)
-        print(message)
-        modifiedMessage = message.decode()
-        serverSocket.sendto(modifiedMessage.encode(),clientAddress)
+	message, clientAddress = serverSocket.recvfrom(2048)
+	print(message)
+        if (message.decode() == "Send IP"):
+        	modifiedMessage = clientAddress[0]
+        	serverSocket.sendto(modifiedMessage.encode(),clientAddress)
+        elif (message.decode() == "Send Port"):
+        	modifiedMessage = clientAddress[1]
+        	serverSocket.sendto(modifiedMessage.encode(),clientAddress)
 elif (Type == "T"):
     serverSocket = socket(AF_INET,SOCK_STREAM) 
     serverSocket.bind(('',serverPort))

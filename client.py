@@ -21,14 +21,14 @@ while(a == False):
         if num == "1":
                 message = serverName
                 clientSocket.connect((serverName,serverPort))
-                clientSocket.send(message.endcode())
+                clientSocket.send(message.encode())
                 modifiedMessage = clientSocket.recv(1024)
                 print (modifiedMessage.decode())
                 clientSocket.close
         elif num == "2":
                 message = str(serverPort)
                 clientSocket.connect((serverName,serverPort))
-                clientSocket.send(message.endcode())
+                clientSocket.send(message.encode())
                 modifiedMessage = clientSocket.recv(1024)
                 print (modifiedMessage.decode())
                 clientSocket.close
@@ -37,24 +37,24 @@ while(a == False):
                 currentTime = dt.datetime.now()
                 print(currentTime)
                 clientSocket.connect((serverName,serverPort))
-                clientSocket.send(message.endcode())
+                clientSocket.send(message.encode())
                 modifiedMessage = clientSocket.recv(1024)
                 print (modifiedMessage.decode())
                 clientSocket.close
         elif num == "4":
                 a = True
-        a = True
+        
     if internet_Type == 'U' or internet_Type == 'u':
         clientSocket = socket(AF_INET, SOCK_DGRAM)
         num1 = input("Please enter a value from 1-4: ")
         if num1 == "1":
-                message = serverName
+                message = "Send IP"
                 clientSocket.sendto(message.encode(),(serverName,serverPort))
                 modifiedMessage, serverAddress = clientSocket.recvfrom(2048)
                 print (modifiedMessage.decode())
                 clientSocket.close
         elif num1 == "2":
-                message = str(serverPort)
+                message = "Send Port"
                 clientSocket.sendto(message.encode(),(serverName,serverPort))
                 modifiedMessage, serverAddress = clientSocket.recvfrom(2048)
                 print (modifiedMessage.decode())
