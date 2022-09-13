@@ -29,8 +29,9 @@ if (Type == "U"):
         elif(message.decode() == "Send Port"):
             modifiedMessage = str(clientAddress[1])
             serverSocket.sendto(modifiedMessage.encode(),clientAddress)
-        elif(message.decode() == "TimeDelay"):
-            modifiedMessage = message
+        elif(message.decode()[0:9] == "TimeDelay"):
+             	
+            modifiedMessage = message.decode()[9:35]
             serverSocket.sendto(modifiedMessage.encode(),clientAddress)
 
 
