@@ -1,6 +1,8 @@
+from multiprocessing import connection
 from socket import *
 import argparse
 import time as dt
+import re
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-t","--type", help="Sets Communitcation Type for server: ", type=str)
@@ -16,15 +18,24 @@ if (Type == "U"):
     serverSocket.bind(('',serverPort))
     print ("The server is ready to receieve")
     while True:
-	message, clientAddress = serverSocket.recvfrom(2048)
-	print(message)
-        if (message.decode() == "Send IP"):
-        	modifiedMessage = clientAddress[0]
-        	serverSocket.sendto(modifiedMessage.encode(),clientAddress)
-        elif (message.decode() == "Send Port"):
-        	modifiedMessage = clientAddress[1]
-        	serverSocket.sendto(modifiedMessage.encode(),clientAddress)
-elif (Type == "T"):
+        message, clientAddress = serverSocket.recvfrom(2048)
+        print(message)
+        Time = "TimeDelay2022-09-12 15:35:05.865171"
+        print(len(Time))
+        
+        if(message.decode() == "Send IP"):
+            modifiedMessage = clientAddress[0]
+            serverSocket.sendto(modifiedMessage.encode(),clientAddress)
+        elif(message.decode() == "Send Port"):
+            modifiedMessage = str(clientAddress[1])
+            serverSocket.sendto(modifiedMessage.encode(),clientAddress)
+        elif(message.decode() == "TimeDelay"):
+            modifiedMessage = message
+            serverSocket.sendto(modifiedMessage.encode(),clientAddress)
+
+
+    
+if (Type == "T"):
     serverSocket = socket(AF_INET,SOCK_STREAM) 
     serverSocket.bind(('',serverPort))
     serverSocket.listen(1)
@@ -32,6 +43,15 @@ elif (Type == "T"):
     while True:
         connectionSocket, addr = serverSocket.accept()
         sentence = connectionSocket.recv(1024).decode()
-        connectionSocket.send(sentence.upper().encode())
-        connectionSocket.close()
+        print(sentence)
+        Time = "TimeDelay2022-09-12 15:35:05.865171"
+        if (sentence == "Send IP"):
+            connectionSocket.send(addr[0].encode())
+            connectionSocket.close()
+        elif (sentence == "Send Port"):
+            connectionSocket.send(str(addr[1]).encode())
+            connectionSocket.close()
+        elif(sentence == len(Time)):
+            currentTime = dt.datetime.now()
+            connectionSocket.send(sentence.encode())
    
