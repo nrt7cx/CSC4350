@@ -1,9 +1,10 @@
-from lzma import MODE_FAST
-from pickle import TRUE
+#Nathaniel Tirado
+#Client sends three different messages to the server and recieves the corresponding message back.
+#Python; socket, argparse, datetime
+#run with command line
 from socket import *
 import argparse
 import datetime as dt
-from time import time
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-i","--internet", help="Sets IP Adress for server: ", type=str)
@@ -40,7 +41,12 @@ while(a == False):
                 clientSocket.connect((serverName,serverPort))
                 clientSocket.send(message.encode())
                 modifiedMessage = clientSocket.recv(1024)
-                print (modifiedMessage.decode())
+                timeToSend  = modifiedMessage[0:13].decode()
+                currentTime = dt.datetime.now()
+                timeNow = modifiedMessage[14:40].decode()
+                timeNow = dt.datetime.strptime(timeNow, '%Y-%m-%d %H:%M:%S.%f')
+                timeNow = currentTime - timeNow
+                print (timeToSend + '' + str(timeNow))
                 clientSocket.close 
         elif num == "4":
                 a = True
@@ -77,4 +83,4 @@ while(a == False):
        
         elif internet_Type != 'T' or  internet_Type != 'U' or  internet_Type != 't' or  internet_Type != 'u':
             print("Please input a T or a U.")
-            internet_Type = input("Enter T for TCP or U for UDP: ")
+            

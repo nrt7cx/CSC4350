@@ -1,5 +1,10 @@
-from multiprocessing import connection
-from operator import mod
+#Nathaniel Tirado
+#Server recieves three different messages from the client and sends the corresponding message back.
+#Python; socket, argparse, datetime
+#run with command line
+
+
+
 from socket import *
 import argparse
 import datetime as dt
@@ -14,7 +19,7 @@ serverPort = args.port
 Type = args.type
 print(Type)
 
-if (Type == "U"):
+if (Type == "U" or Type == "u"):
     serverSocket = socket(AF_INET,SOCK_DGRAM) 
     serverSocket.bind(('',serverPort))
     print ("The server is ready to receieve")
@@ -40,7 +45,7 @@ if (Type == "U"):
 
 
     
-if (Type == "T"):
+elif (Type == "T" or Type == "t"):
     serverSocket = socket(AF_INET,SOCK_STREAM) 
     serverSocket.bind(('',serverPort))
     serverSocket.listen(1)
@@ -49,7 +54,6 @@ if (Type == "T"):
         connectionSocket, addr = serverSocket.accept()
         sentence = connectionSocket.recv(1024).decode()
         print(sentence)
-        Time = "TimeDelay2022-09-12 15:35:05.865171"
         if (sentence == "Send IP"):
             connectionSocket.send(addr[0].encode())
             connectionSocket.close()
@@ -57,6 +61,15 @@ if (Type == "T"):
             connectionSocket.send(str(addr[1]).encode())
             connectionSocket.close()
         elif(sentence[0:9] == "TimeDelay"):
-            connectionSocket.send(sentence[9:35].encode())
-            connectionSocket.close()
-
+            timeDelay = dt.datetime.strptime(sentence[9:35], '%Y-%m-%d %H:%M:%S.%f')
+            timeNow = dt.datetime.now()
+            print(timeDelay)
+            print(timeNow)
+            timeNow = timeNow - timeDelay
+            modifiedSentence = str(timeNow) + str(dt.datetime.now())
+            print(timeNow)
+            connectionSocket.send(modifiedSentence.encode(),)
+            clientSocket.close()
+            
+else: 
+    print("Please enter a T or a U.")
