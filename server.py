@@ -69,7 +69,7 @@ elif (Type == "T" or Type == "t"):
             modifiedSentence = str(timeNow) + str(dt.datetime.now())
             print(timeNow)
             connectionSocket.send(modifiedSentence.encode(),)
-            clientSocket.close()
+            connectionSocket.close()
             
 else: 
     print("Please enter a T or a U.")
