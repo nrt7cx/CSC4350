@@ -1,8 +1,9 @@
 from multiprocessing import connection
+from operator import mod
 from socket import *
 import argparse
-import time as dt
-import re
+import datetime as dt
+
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-t","--type", help="Sets Communitcation Type for server: ", type=str)
@@ -20,8 +21,6 @@ if (Type == "U"):
     while True:
         message, clientAddress = serverSocket.recvfrom(2048)
         print(message)
-        Time = "TimeDelay2022-09-12 15:35:05.865171"
-        print(len(Time))
         
         if(message.decode() == "Send IP"):
             modifiedMessage = clientAddress[0]
@@ -30,8 +29,13 @@ if (Type == "U"):
             modifiedMessage = str(clientAddress[1])
             serverSocket.sendto(modifiedMessage.encode(),clientAddress)
         elif(message.decode()[0:9] == "TimeDelay"):
-             	
-            modifiedMessage = message.decode()[9:35]
+            timeDelay = dt.datetime.strptime(message.decode()[9:35], '%Y-%m-%d %H:%M:%S.%f')
+            timeNow = dt.datetime.now()
+            print(timeDelay)
+            print(timeNow)
+            timeNow = timeNow - timeDelay
+            modifiedMessage = str(timeNow) + str(dt.datetime.now())
+            print(timeNow)
             serverSocket.sendto(modifiedMessage.encode(),clientAddress)
 
 
@@ -52,7 +56,7 @@ if (Type == "T"):
         elif (sentence == "Send Port"):
             connectionSocket.send(str(addr[1]).encode())
             connectionSocket.close()
-        elif(sentence == len(Time)):
-            currentTime = dt.datetime.now()
-            connectionSocket.send(sentence.encode())
-   
+        elif(sentence[0:9] == "TimeDelay"):
+            connectionSocket.send(sentence[9:35].encode())
+            connectionSocket.close()
+

@@ -1,7 +1,9 @@
+from lzma import MODE_FAST
 from pickle import TRUE
 from socket import *
 import argparse
 import datetime as dt
+from time import time
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-i","--internet", help="Sets IP Adress for server: ", type=str)
@@ -63,7 +65,12 @@ while(a == False):
                 message = "TimeDelay" + str(currentTime)
                 clientSocket.sendto(message.encode(),(serverName,serverPort))
                 modifiedMessage, serverAddress = clientSocket.recvfrom(2048)
-                print (modifiedMessage.decode())
+                timeToSend = modifiedMessage[0:13].decode()
+                currentTime = dt.datetime.now()
+                timeNow = modifiedMessage[14:40].decode()
+                timeNow = dt.datetime.strptime(timeNow, '%Y-%m-%d %H:%M:%S.%f')
+                timeNow = currentTime - timeNow
+                print (timeToSend + '' + str(timeNow))
                 clientSocket.close 
         elif num1 == "4":
                 a = True
