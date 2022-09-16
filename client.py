@@ -5,6 +5,8 @@
 from socket import *
 import argparse
 import datetime as dt
+import string
+import random
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-i","--internet", help="Sets IP Adress for server: ", type=str)
@@ -41,15 +43,25 @@ while(a == False):
                 clientSocket.connect((serverName,serverPort))
                 clientSocket.send(message.encode())
                 modifiedMessage = clientSocket.recv(1024)
-                timeToSend  = modifiedMessage[0:13].decode()
+                timeToSend  = modifiedMessage[0:17].decode()
                 currentTime = dt.datetime.now()
-                timeNow = modifiedMessage[14:40].decode()
+                timeNow = modifiedMessage[18:44].decode()
                 timeNow = dt.datetime.strptime(timeNow, '%Y-%m-%d %H:%M:%S.%f')
                 timeNow = currentTime - timeNow
-                print (timeToSend + '' + str(timeNow))
+                print (timeToSend + '|' + str(timeNow))
                 clientSocket.close 
         elif num == "4":
                 a = True
+        else: 
+                source = string.ascii_lowercase
+                randomString = ''.join(random.choice(source)for i in range(8))
+                message = randomString
+                clientSocket.connect((serverName,serverPort))
+                clientSocket.send(message.encode())
+                modifiedMessage = clientSocket.recv(1024)
+                print(modifiedMessage.decode())
+                clientSocket.close
+                
         
     if internet_Type == 'U' or internet_Type == 'u':
         clientSocket = socket(AF_INET, SOCK_DGRAM)
@@ -71,22 +83,22 @@ while(a == False):
                 message = "TimeDelay" + str(currentTime)
                 clientSocket.sendto(message.encode(),(serverName,serverPort))
                 modifiedMessage, serverAddress = clientSocket.recvfrom(2048)
-                timeToSend = modifiedMessage[0:13].decode()
+                timeToSend = modifiedMessage[0:17].decode()
                 currentTime = dt.datetime.now()
-                timeNow = modifiedMessage[14:40].decode()
+                timeNow = modifiedMessage[18:44].decode()
                 timeNow = dt.datetime.strptime(timeNow, '%Y-%m-%d %H:%M:%S.%f')
                 timeNow = currentTime - timeNow
-                print (timeToSend + '' + str(timeNow))
+                print (timeToSend + '|' + str(timeNow))
                 clientSocket.close 
         elif num1 == "4":
                 a = True
-        elif num1 == "5":
-                message = "COOL"
+        else: 
+                source = string.ascii_lowercase
+                randomString = ''.join(random.choice(source)for i in range(8))
+                message = randomString
                 clientSocket.sendto(message.encode(),(serverName,serverPort))
-                modifiedMessage,serverAddress = clientSocket.recvfrom(2048)
-                print (modifiedMessage.decode())
+                modifiedMessage, serverAddress = clientSocket.recvfrom(2048)
+                print(modifiedMessage.decode())
                 clientSocket.close
-        
-        elif internet_Type != 'T' or  internet_Type != 'U' or  internet_Type != 't' or  internet_Type != 'u':
-            print("Please input a T or a U.")
+       
             

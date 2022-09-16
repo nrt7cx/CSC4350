@@ -25,10 +25,10 @@ if (Type == "U" or Type == "u"):
         print(message)
         
         if(message.decode() == "Send IP"):
-            modifiedMessage = clientAddress[0]
+            modifiedMessage = "OK: " + clientAddress[0]
             serverSocket.sendto(modifiedMessage.encode(),clientAddress)
         elif(message.decode() == "Send Port"):
-            modifiedMessage = str(clientAddress[1])
+            modifiedMessage = "OK: " + str(clientAddress[1])
             serverSocket.sendto(modifiedMessage.encode(),clientAddress)
         elif(message.decode()[0:9] == "TimeDelay"):
             timeDelay = dt.datetime.strptime(message.decode()[9:35], '%Y-%m-%d %H:%M:%S.%f')
@@ -36,8 +36,8 @@ if (Type == "U" or Type == "u"):
             print(timeDelay)
             print(timeNow)
             timeNow = timeNow - timeDelay
-            modifiedMessage = str(timeNow) + str(dt.datetime.now())
-            print(timeNow)
+            modifiedMessage = "OK: " + str(timeNow) + str(dt.datetime.now())
+            print(modifiedMessage)
             serverSocket.sendto(modifiedMessage.encode(),clientAddress)
         else: 
             modifiedMessage = "INVALID"
@@ -54,10 +54,12 @@ elif (Type == "T" or Type == "t"):
         sentence = connectionSocket.recv(1024).decode()
         print(sentence)
         if (sentence == "Send IP"):
-            connectionSocket.send(addr[0].encode())
+            modifiedSentence = "OK: " + addr[0]
+            connectionSocket.send(modifiedSentence.encode())
             connectionSocket.close()
         elif (sentence == "Send Port"):
-            connectionSocket.send(str(addr[1]).encode())
+            modifiedSentence = "OK: " + str(addr[1])
+            connectionSocket.send(modifiedSentence.encode())
             connectionSocket.close()
         elif(sentence[0:9] == "TimeDelay"):
             timeDelay = dt.datetime.strptime(sentence[9:35], '%Y-%m-%d %H:%M:%S.%f')
@@ -65,12 +67,12 @@ elif (Type == "T" or Type == "t"):
             print(timeDelay)
             print(timeNow)
             timeNow = timeNow - timeDelay
-            modifiedSentence = str(timeNow) + str(dt.datetime.now())
+            modifiedSentence = "OK: " + str(timeNow) + str(dt.datetime.now())
             print(timeNow)
-            connectionSocket.send(modifiedSentence.encode(),)
+            connectionSocket.send(modifiedSentence.encode())
             connectionSocket.close()
         else: 
-            modifiedMessage = "INVALID"
-            serverSocket.sendto(modifiedMessage.encode(),clientAddress)    
+            modifiedSentence = "INVALID"
+            connectionSocket.send(modifiedSentence.encode())    
 else: 
     print("Please enter a T or a U.")
