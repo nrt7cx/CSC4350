@@ -80,7 +80,13 @@ while(a == False):
                 clientSocket.close 
         elif num1 == "4":
                 a = True
-       
+        elif num1 == "5":
+                message = "COOL"
+                clientSocket.sendto(message.encode(),(serverName,serverPort))
+                modifiedMessage,serverAddress = clientSocket.recvfrom(2048)
+                print (modifiedMessage.decode())
+                clientSocket.close
+        
         elif internet_Type != 'T' or  internet_Type != 'U' or  internet_Type != 't' or  internet_Type != 'u':
             print("Please input a T or a U.")
             

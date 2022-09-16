@@ -2,9 +2,6 @@
 #Server recieves three different messages from the client and sends the corresponding message back.
 #Python; socket, argparse, datetime
 #run with command line
-
-
-
 from socket import *
 import argparse
 import datetime as dt
@@ -42,7 +39,9 @@ if (Type == "U" or Type == "u"):
             modifiedMessage = str(timeNow) + str(dt.datetime.now())
             print(timeNow)
             serverSocket.sendto(modifiedMessage.encode(),clientAddress)
-
+        else: 
+            modifiedMessage = "INVALID"
+            serverSocket.sendto(modifiedMessage.encode(),clientAddress)
 
     
 elif (Type == "T" or Type == "t"):
@@ -70,6 +69,8 @@ elif (Type == "T" or Type == "t"):
             print(timeNow)
             connectionSocket.send(modifiedSentence.encode(),)
             connectionSocket.close()
-            
+        else: 
+            modifiedMessage = "INVALID"
+            serverSocket.sendto(modifiedMessage.encode(),clientAddress)    
 else: 
     print("Please enter a T or a U.")
