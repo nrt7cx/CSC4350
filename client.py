@@ -51,7 +51,14 @@ while(a == False):
                 print (timeToSend + '|' + str(timeNow))
                 clientSocket.close 
         elif num == "4":
+                message = "Quit"
+                clientSocket.connect((serverName,serverPort))
+                clientSocket.send(message.encode())
+                modifiedMessage = clientSocket.recv(1024)
+                print (modifiedMessage.decode())
+                clientSocket.close
                 a = True
+                
         else: 
                 source = string.ascii_lowercase
                 randomString = ''.join(random.choice(source)for i in range(8))
@@ -91,6 +98,12 @@ while(a == False):
                 print (timeToSend + '|' + str(timeNow))
                 clientSocket.close 
         elif num1 == "4":
+                message = "Quit"
+                clientSocket.connect((serverName,serverPort))
+                clientSocket.send(message.encode())
+                modifiedMessage = clientSocket.recv(1024)
+                print (modifiedMessage.decode())
+                clientSocket.close
                 a = True
         else: 
                 source = string.ascii_lowercase

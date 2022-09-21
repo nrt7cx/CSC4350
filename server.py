@@ -5,7 +5,7 @@
 from socket import *
 import argparse
 import datetime as dt
-
+import logging
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-t","--type", help="Sets Communitcation Type for server: ", type=str)
@@ -23,13 +23,15 @@ if (Type == "U" or Type == "u"):
     while True:
         message, clientAddress = serverSocket.recvfrom(2048)
         print(message)
-        
+        logging.basicConfig(filename='example.log', level=logging.INFO, format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
         if(message.decode() == "Send IP"):
             modifiedMessage = "OK: " + clientAddress[0]
             serverSocket.sendto(modifiedMessage.encode(),clientAddress)
+            logging.info('IP|' + 'VALID')
         elif(message.decode() == "Send Port"):
             modifiedMessage = "OK: " + str(clientAddress[1])
             serverSocket.sendto(modifiedMessage.encode(),clientAddress)
+            logging.info('PORT|' + 'VALID')
         elif(message.decode()[0:9] == "TimeDelay"):
             timeDelay = dt.datetime.strptime(message.decode()[9:35], '%Y-%m-%d %H:%M:%S.%f')
             timeNow = dt.datetime.now()
@@ -39,9 +41,18 @@ if (Type == "U" or Type == "u"):
             modifiedMessage = "OK: " + str(timeNow) + str(dt.datetime.now())
             print(modifiedMessage)
             serverSocket.sendto(modifiedMessage.encode(),clientAddress)
+            logging.info('TIMEDELAY|' + 'VALID')
+        elif(message.decode() == "Quit"):
+            modifiedMessage = "OK: Quit Program"
+            print(modifiedMessage)
+            logging.info('QUIT|' + 'VALID')
+            serverSocket.sendto(modifiedMessage.encode(),clientAddress)
+
         else: 
+            logging.warning('NULL|' + 'INVALID')
             modifiedMessage = "INVALID"
             serverSocket.sendto(modifiedMessage.encode(),clientAddress)
+            
 
     
 elif (Type == "T" or Type == "t"):
@@ -50,6 +61,7 @@ elif (Type == "T" or Type == "t"):
     serverSocket.listen(1)
     print ("The server is ready to receieve")
     while True:
+        logging.basicConfig(filename='example.log', level=logging.INFO, format='%(asctime)s %(message)s', datefmt='%m/%d/%Y %I:%M:%S %p')
         connectionSocket, addr = serverSocket.accept()
         sentence = connectionSocket.recv(1024).decode()
         print(sentence)
@@ -57,10 +69,12 @@ elif (Type == "T" or Type == "t"):
             modifiedSentence = "OK: " + addr[0]
             connectionSocket.send(modifiedSentence.encode())
             connectionSocket.close()
+            logging.info('IP|' + 'VALID')
         elif (sentence == "Send Port"):
             modifiedSentence = "OK: " + str(addr[1])
             connectionSocket.send(modifiedSentence.encode())
             connectionSocket.close()
+            logging.info('PORT|' + 'VALID')
         elif(sentence[0:9] == "TimeDelay"):
             timeDelay = dt.datetime.strptime(sentence[9:35], '%Y-%m-%d %H:%M:%S.%f')
             timeNow = dt.datetime.now()
@@ -71,8 +85,17 @@ elif (Type == "T" or Type == "t"):
             print(timeNow)
             connectionSocket.send(modifiedSentence.encode())
             connectionSocket.close()
+            logging.info('TIMEDELAY|' + 'VALID')
+        elif(sentence == "Quit"):
+            modifiedSentence = "OK: Quit Program"
+            print(modifiedSentence)
+            logging.info('QUIT|' + 'VALID')
+            connectionSocket.send(modifiedSentence.encode())
+            connectionSocket.close()
+
         else: 
+            logging.warning('NULL|' + 'INVALID')
             modifiedSentence = "INVALID"
             connectionSocket.send(modifiedSentence.encode())    
-else: 
-    print("Please enter a T or a U.")
+else: #not entirely sure if this is useless code
+    print("Please enter a T or a U.") 
