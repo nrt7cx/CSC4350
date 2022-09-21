@@ -9,9 +9,9 @@ import string
 import random
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-i","--internet", help="Sets IP Adress for server: ", type=str)
-parser.add_argument("-p","--port", help="Sets port Adress for server: ", type=int)
-parser.add_argument("-t","--type", help="Sets port Adress for server: ", type=str)
+parser.add_argument("-i","--internet", help="Sets IP Address for server: ", type=str)
+parser.add_argument("-p","--port", help="Sets Port for server: ", type=int)
+parser.add_argument("-t","--type", help="Sets connection type for server: ", type=str)
 args = parser.parse_args()
 
 serverName = args.internet

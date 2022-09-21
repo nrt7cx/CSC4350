@@ -8,8 +8,8 @@ import datetime as dt
 import logging
 
 parser = argparse.ArgumentParser()
-parser.add_argument("-t","--type", help="Sets Communitcation Type for server: ", type=str)
-parser.add_argument("-p","--port", help="Sets port Adress for server: ", type=int)
+parser.add_argument("-t","--type", help="Sets connection type for server: ", type=str)
+parser.add_argument("-p","--port", help="Sets port for server: ", type=int)
 args = parser.parse_args()
 
 serverPort = args.port
