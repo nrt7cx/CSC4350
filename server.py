@@ -1,6 +1,6 @@
 #Nathaniel Tirado
-#Server recieves three different messages from the client and sends the corresponding message back.
-#Python; socket, argparse, datetime
+#Server recieves four different messages from the client and sends the corresponding message back.
+#Python; socket, argparse, datetime, logging
 #run with command line
 from socket import *
 import argparse
